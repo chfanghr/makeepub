@@ -165,13 +165,28 @@ func parseLine(line string, n *novel, lastStat bool) (isUnknown bool) {
 
 		if isArabic(runeId[0]) {
 			id, err = strconv.Atoi(string(runeId))
+			if err != nil {
+				log.Println("cannot parse id of paragraph: ", err)
+				return true
+			}
 		} else {
 			id, err = chinese_number.ToArabicNumber(string(runeId))
-		}
-
-		if err != nil {
-			log.Println("cannot parse id of paragraph: ", err)
-			return true
+			if err != nil {
+				var altId []int
+				for _, r := range runeId {
+					num, err := chinese_number.ParseChineseNumberCharacter(r)
+					if err != nil {
+						log.Println("cannot parse id of paragraph: ", err)
+						return true
+					}
+					altId = append(altId, num.GetValue())
+				}
+				factor := 1
+				for i = len(altId) - 1; i >= 0; i-- {
+					id += altId[i] * factor
+					factor *= 10
+				}
+			}
 		}
 
 		n.paras = append(n.paras, para{
