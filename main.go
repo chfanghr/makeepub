@@ -129,8 +129,7 @@ func parseLine(line string, n *novel, lastStat bool) (isUnknown bool) {
 			title:  string(title),
 			author: string(author),
 		}
-	case ' ': // parse content of paragraph
-	case '　':
+	case ' ', '　': // parse content of paragraph
 		if lastStat {
 			log.Println("waiting for next valid header....")
 			return true
