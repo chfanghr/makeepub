@@ -1,7 +1,7 @@
 # makeepub
 
 这个小工具能把你下载的盗版txt小说转换成带目录的epub电子书，极大提升了盗版狗的阅读体验。<br>
-This small tool convert your pirated txt novel to epub format, with outline, which significantly improve reading experience.
+This small tool convert your pirated txt novel to epub format, with outline, which significantly improves reading experience of readers.
 
 ## 安装/installation
 ```shell script
@@ -14,3 +14,6 @@ makeepub <your txt file>
 ```
 
 ![](doc/img/Annotation%202020-02-14%20142610.png)
+
+## LICENSE
+MIT. Read [LICENSE](LICENSE) for more details.
