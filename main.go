@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"github.com/bmaupin/go-epub"
 	"github.com/chfanghr/chinese_number"
@@ -9,7 +10,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"sort"
 	"strconv"
 )
 
@@ -57,7 +57,7 @@ type novel struct {
 }
 
 func (n novel) toEpub() (*epub.Epub, error) {
-	sort.Sort(n.paras)
+	//sort.Sort(n.paras)
 
 	e := epub.NewEpub(n.title)
 
@@ -171,6 +171,9 @@ func parseLine(line string, n *novel, lastStat bool) (isUnknown bool) {
 			}
 		} else {
 			id, err = chinese_number.ToArabicNumber(string(runeId))
+			if regexp.MustCompile("(.*?)零+").MatchString(string(runeId)) {
+				err = errors.New("use fallback parser to avoid bug of package chinese_number")
+			}
 			if err != nil {
 				var altId []int
 				for _, r := range runeId {
@@ -182,7 +185,8 @@ func parseLine(line string, n *novel, lastStat bool) (isUnknown bool) {
 					altId = append(altId, num.GetValue())
 				}
 				factor := 1
-				for i = len(altId) - 1; i >= 0; i-- {
+				id = 0
+				for i := len(altId) - 1; i >= 0; i-- {
 					id += altId[i] * factor
 					factor *= 10
 				}
