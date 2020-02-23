@@ -121,8 +121,9 @@ func parseLine(line string, n *novel, lastStat bool) (isUnknown bool) {
 		}
 
 		if i <= len(runeLine)-7 && string(runeLine[i+1:i+7]) == " - 作者：" { // parse author
-			log.Println("novel doesn't have an author")
 			author = runeLine[i+7:]
+		} else {
+			log.Println("novel doesn't have an author")
 		}
 
 		n.novelHead = novelHead{
